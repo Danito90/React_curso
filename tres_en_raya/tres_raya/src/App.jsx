@@ -8,13 +8,33 @@ import { TURNS } from "./constantes";
 import { checkWinnerFrom } from "./logic/board";
 import { WinnerModal } from "./componentes/WinnerModal.jsx";
 import { checkEndGame } from "./logic/checkGame.jsx";
+import {
+  saveGameToStorage,
+  resetGameStorage,
+} from "./storage/localstorage.jsx";
 
 import "./App.css";
 
 function App() {
   /* Estados */
-  const [board, setBoard] = useState(Array(9).fill(null));
-  const [turn, setTurn] = useState(TURNS.X);
+
+  const [board, setBoard] = useState(() => {
+    // verificamos el estado antes de asignarle el estado inicial, si tenemos
+    // guardado en el localstorage, se carga este estado
+    const boardFromStorage = window.localStorage.getItem("board");
+    if (boardFromStorage) return JSON.parse(boardFromStorage);
+    return Array(9).fill(null);
+  });
+
+  const [turn, setTurn] = useState(() => {
+    const currentTurn = window.localStorage.getItem("turn");
+    if (currentTurn) {
+      return JSON.parse(currentTurn);
+    } else {
+      return TURNS.X;
+    }
+  });
+
   // null no hay ganador, false empate, true ganador
   const [winner, setWinner] = useState(null);
 
@@ -23,6 +43,9 @@ function App() {
     setBoard(Array(9).fill(null));
     setTurn(TURNS.X);
     setWinner(null);
+
+    // Borramos el localstorage
+    resetGameStorage();
   };
 
   const updateBoard = (index) => {
@@ -38,6 +61,12 @@ function App() {
     // Trabajamos sobre de quien es el turno
     const newTurn = turn === TURNS.X ? TURNS.O : TURNS.X;
     setTurn(newTurn);
+
+    // Guardar partida en localstorage
+    saveGameToStorage({
+      board: newBoard,
+      turn: newTurn,
+    });
 
     //revisar si hay un ganador
     const newWinner = checkWinnerFrom(newBoard);
