@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 // npm install canvas-confetti -E
 import confetti from "canvas-confetti";
 
@@ -53,7 +53,7 @@ function App() {
     if (board[index] || winner) return;
 
     // Trabajamos sobre cada casilla, que valor tiene o debe tener
-    const newBoard = [...board]; //copia bord en newbord
+    const newBoard = [...board]; //copia bord en newboard
     // bord[index] = turn -> esto esta mal, porques las props y el estado "son inmutables"
     newBoard[index] = turn; //X u O
     setBoard(newBoard);
@@ -61,27 +61,31 @@ function App() {
     // Trabajamos sobre de quien es el turno
     const newTurn = turn === TURNS.X ? TURNS.O : TURNS.X;
     setTurn(newTurn);
-
-    // Guardar partida en localstorage
-    saveGameToStorage({
-      board: newBoard,
-      turn: newTurn,
-    });
-
+ 
     //revisar si hay un ganador
     const newWinner = checkWinnerFrom(newBoard);
 
     if (newWinner) {
-      // Aca a la hora de ver el ganador cuidado! poprque los estados son asincronos!
+      confetti();
+      // Aca a la hora de ver el ganador cuidado! porque los estados son asincronos!
       // alert(`El ganador es ${newWinner}`);
       // Podemos no ver el ganador. Con el siguiente codigo evitamos esto
-      confetti();
       setWinner(newWinner);
       // console.log(newWinner)
     } else if (checkEndGame(newBoard)) {
       setWinner(false); // empate
     }
   };
+
+  useEffect(() => {
+    // Guardar partida en localstorage
+    saveGameToStorage({
+      board: board,
+      turn: turn,
+    });
+    console.log(`Siguiente turno: ${turn}`);
+    console.log(`Tablero: ${board}`);
+  }, [turn,board]);
 
   return (
     <>
