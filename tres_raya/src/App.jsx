@@ -61,7 +61,7 @@ function App() {
     // Trabajamos sobre de quien es el turno
     const newTurn = turn === TURNS.X ? TURNS.O : TURNS.X;
     setTurn(newTurn);
- 
+
     //revisar si hay un ganador
     const newWinner = checkWinnerFrom(newBoard);
 
@@ -85,7 +85,7 @@ function App() {
     });
     console.log(`Siguiente turno: ${turn}`);
     console.log(`Tablero: ${board}`);
-  }, [turn,board]);
+  }, [turn, board]);
 
   return (
     <>
