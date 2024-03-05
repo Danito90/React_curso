@@ -3,8 +3,12 @@ import './App.css'
 
 const CAT_ENDPOINT_RANDOM_FACT = 'https://catfact.ninja/fact'
 // const CAT_ENDPOINT_IMAGE_URL = `https://cataas.com/cat/says/${firstWord}?size=50&color=red&json=true`
+const CAT_ENDPOINT_URL = 'https://cataas.com'
+
+// Hay un problema con la Api, no esta activa y no devuelve la url, pero el codigo es correcto y funciona
 function App () {
-  const [fact, setfact] = useState('gatos')
+  const [fact, setfact] = useState('')
+  const [ImageUrl, setImageUrl] = useState('')
 
   useEffect(() => {
     // inicia una solicitud de red y devuelve un objeto Promise
@@ -13,7 +17,23 @@ function App () {
       .then(res => res.json())
       // Recibe los datos JSON analizados, para actualizar la variable de estado
       // del json tomamos  el valor de la propiedad "fact"
-      .then((data) => setfact(data.fact))
+      .then((data) => {
+        // Desestructuración para extraer la fact propiedad
+        const { fact } = data
+        // pasamos la propiedad fact
+        setfact(fact)
+        const firstWord = fact.split(' ', 3).join(' ')
+        console.log(`First word: ${firstWord}`)
+
+        fetch(`https://cataas.com/cat/says/${firstWord}?size=50&color=red&json=true`)
+          .then((response) => response.json())
+          .then((imageData) => {
+            const { url } = imageData
+            setImageUrl(url)
+            console.log(imageData)
+          })
+      }
+      )
   }, [])
 
   // Identica solucion pero distinto codigo
@@ -27,11 +47,13 @@ function App () {
   // }, [])
 
   return (
-    <>
+    <main>
       <div className="App">Aplicacion de gatitos</div>
-      <section><img src="" alt="Gatito" /></section>
-      {fact && <p>{fact}</p>}
-    </>
+      <section>
+        {ImageUrl && <img src={`${CAT_ENDPOINT_URL}${ImageUrl}`} alt={`Imagen conseguida a partir de las primeras 3 palabras: ${fact}`} id='imgFact' />}
+        {fact && <p>{fact}</p>}
+      </section>
+    </main>
   )
 }
 
