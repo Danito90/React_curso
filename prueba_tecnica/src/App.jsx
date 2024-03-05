@@ -1,33 +1,36 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '../public/vite.svg'
+import { useState, useEffect } from 'react'
 import './App.css'
 
+const CAT_ENDPOINT_RANDOM_FACT = 'https://catfact.ninja/fact'
+// const CAT_ENDPOINT_IMAGE_URL = `https://cataas.com/cat/says/${firstWord}?size=50&color=red&json=true`
 function App () {
-  const [count, setCount] = useState(0)
+  const [fact, setfact] = useState('gatos')
+
+  useEffect(() => {
+    // inicia una solicitud de red y devuelve un objeto Promise
+    fetch(CAT_ENDPOINT_RANDOM_FACT)
+      // Toma una función de devolución de llamada como argumento.
+      .then(res => res.json())
+      // Recibe los datos JSON analizados, para actualizar la variable de estado
+      // del json tomamos  el valor de la propiedad "fact"
+      .then((data) => setfact(data.fact))
+  }, [])
+
+  // Identica solucion pero distinto codigo
+  // useEffect(() => {
+  //   async function getRandomFact () {
+  //     const res = await fetch(CAT_ENDPOINT_RANDOM_FACT)
+  //     const json = await res.json()
+  //     setfact(json.fact)
+  //   }
+  //   getRandomFact()
+  // }, [])
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank" rel="noreferrer">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank" rel="noreferrer">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <div className="App">Aplicacion de gatitos</div>
+      <section><img src="" alt="Gatito" /></section>
+      {fact && <p>{fact}</p>}
     </>
   )
 }
