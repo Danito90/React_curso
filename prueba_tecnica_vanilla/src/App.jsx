@@ -10,6 +10,7 @@ export function App () {
   const [fact, setfact] = useState('')
   const [ImageUrl, setImageUrl] = useState('')
 
+  // un efecto para recuperar la cita al cargar la pagina
   useEffect(() => {
     // inicia una solicitud de red y devuelve un objeto Promise
     fetch(CAT_ENDPOINT_RANDOM_FACT)
@@ -22,19 +23,24 @@ export function App () {
         const { fact } = data
         // pasamos la propiedad fact
         setfact(fact)
-        const firstWord = fact.split(' ', 3).join(' ')
-        console.log(`First word: ${firstWord}`)
-
-        fetch(`https://cataas.com/cat/says/${firstWord}?size=50&color=red&json=true`)
-          .then((response) => response.json())
-          .then((imageData) => {
-            const { url } = imageData
-            setImageUrl(url)
-            console.log(imageData)
-          })
       }
       )
   }, [])
+
+  // efecto para recuperar la imagen cada vez que tenemos una cita nueva
+  useEffect(()=>{
+    if (fact) {
+    const firstWord = fact.split(' ', 3).join(' ')
+    console.log(`First word: ${firstWord}`)
+
+    fetch(`https://cataas.com/cat/says/${firstWord}?size=50&color=red&json=true`)
+      .then((response) => response.json())
+      .then((imageData) => {
+        const { url } = imageData
+        setImageUrl(url)
+        console.log(imageData)
+      })}
+  },[fact])
 
   // Identica solucion pero distinto codigo
   // useEffect(() => {
@@ -51,6 +57,7 @@ export function App () {
       <div className="App">Aplicacion de gatitos</div>
       <section>
         {ImageUrl && <img src={`${CAT_ENDPOINT_URL}${ImageUrl}`} alt={`Imagen conseguida a partir de las primeras 3 palabras: ${fact}`} id='imgFact' />}
+        {!ImageUrl && <img src={`https://upload.wikimedia.org/wikipedia/commons/c/c1/Sin_fotograf%C3%ADa.jpg`} alt={`Sin imagen`} id='imgFact' style = {{width: '180px'}} />}
         {fact && <p>{fact}</p>}
       </section>
     </main>
