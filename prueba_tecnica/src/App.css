@@ -2,13 +2,12 @@ main {
   display: flex;
   flex-direction: column;
   place-items: center;
-  max-width: 800px;
+  max-width: 1100px;
   margin: 0 auto;
   font-family: system-ui;
 }
 
-/* 
-Para alineacion horizontal
+
 section{
   display: flex;
   justify-content: space-between;
@@ -17,6 +16,6 @@ section{
 }
 
 section{
-  max-width: 320px;
+  max-width: 700px;
   height: auto;
-} */
+} 

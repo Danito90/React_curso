@@ -56,7 +56,7 @@ export function App () {
     <main>
       <div className="App">Aplicacion de gatitos</div>
       <section>
-        {ImageUrl && <img src={`${CAT_ENDPOINT_URL}${ImageUrl}`} alt={`Imagen conseguida a partir de las primeras 3 palabras: ${fact}`} id='imgFact' />}
+        {ImageUrl && <img src={`${CAT_ENDPOINT_URL}${ImageUrl}`} alt={`Imagen conseguida a partir de las primeras 3 palabras: ${fact}`} id='imgFact' style = {{width: '180px'}}/>}
         {!ImageUrl && <img src={`https://upload.wikimedia.org/wikipedia/commons/c/c1/Sin_fotograf%C3%ADa.jpg`} alt={`Sin imagen`} id='imgFact' style = {{width: '180px'}} />}
         {fact && <p>{fact}</p>}
       </section>

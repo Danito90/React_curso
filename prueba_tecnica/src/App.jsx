@@ -3,7 +3,7 @@ import './App.css'
 
 const CAT_ENDPOINT_RANDOM_FACT = 'https://catfact.ninja/fact'
 // const CAT_ENDPOINT_IMAGE_URL = `https://cataas.com/cat/says/${firstWord}?size=50&color=red&json=true`
-const CAT_ENDPOINT_URL = 'https://cataas.com'
+// const CAT_ENDPOINT_URL = 'https://cataas.com'
 
 // Hay un problema con la Api, no esta activa y no devuelve la url, pero el codigo es correcto y funciona
 function App () {
@@ -25,12 +25,12 @@ function App () {
         const firstWord = fact.split(' ', 3).join(' ')
         console.log(`First word: ${firstWord}`)
 
-        fetch(`https://cataas.com/cat/says/${firstWord}?size=50&color=red&json=true`)
-          .then((response) => response.json())
+        fetch('https://api.thecatapi.com/v1/images/search')
+          .then(response => response.json())
           .then((imageData) => {
-            const { url } = imageData
-            setImageUrl(url)
             console.log(imageData)
+            const { url } = imageData[0]
+            setImageUrl(url)
           })
       }
       )
@@ -48,10 +48,11 @@ function App () {
 
   return (
     <main>
-      <div className="App">Aplicacion de gatitos</div>
+      <h1 className="App">Aplicacion de gatitos</h1><br />
       <section>
-        {ImageUrl && <img src={`${CAT_ENDPOINT_URL}${ImageUrl}`} alt={`Imagen conseguida a partir de las primeras 3 palabras: ${fact}`} id='imgFact' />}
-        {fact && <p>{fact}</p>}
+        {ImageUrl && <img src={`${ImageUrl}`} alt={`Imagen conseguida a partir de las primeras 3 palabras: ${fact}`} id='imgFact' style = {{ width: '300px', height: '300px' }}/>}
+
+        {fact && <h5>{fact}</h5>}
       </section>
     </main>
   )
